@@ -9,3 +9,17 @@
 .margin-top {
     margin-top: 50px;
 }
+
+.img-small {
+    width: 50px;
+    height: 50px;
+}
+
+.margin-sm {
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.text-bold {
+    font-weight: bold;
+}

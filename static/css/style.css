@@ -1,0 +1,11 @@
+
+.well {
+    margin-top: 20px;
+    border: 2px #eee solid;
+    text-align: center;
+    padding: 10px;
+}
+
+.margin-top {
+    margin-top: 50px;
+}

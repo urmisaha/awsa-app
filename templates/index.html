@@ -8,14 +8,14 @@
                 <div class="form-group row justify-content-center">
                     <select class="form-control form-control-md col-md-4" name="domain">
                         <option>Select Domain</option>
-                        <option value="Restaurant">Restaurant</option>
-                        <option value="Movie">Movie</option>
-                        <option value="Music">Music</option>
-                        <option value="Hotel">Hotel</option>
+                        <option value="restaurant">Restaurant</option>
+                        <option value="movie">Movie</option>
+                        <option value="music">Music</option>
+                        <option value="hotel">Hotel</option>
                     </select>
                 </div>
                 <div class="form-group row justify-content-center">
-                    <textarea class="form-control col-md-10" id="formGroupExampleInput" name="review" placeholder="Enter review">{{ request.form['review'] }}</textarea>
+                    <textarea class="form-control col-md-10" id="formGroupExampleInput" name="review" rows=8 placeholder="Enter review">{{ request.form['review'] }}</textarea>
                 </div>
                 <div class="form-group row justify-content-center">
                     <button type="submit" class="btn btn-dark col-md-4">Predict Sentiment</button>
@@ -26,38 +26,43 @@
     <div class="margin-top row justify-content-center">
         <div class="card card-body border-dark bg-light col-md-8">
             <h2>Result</h2>
+            {% if result %}
             <table class="table">
                 <caption>The row colours show the sentiments of the reviews</caption>
-                <thead>
+                <thead class="thead-dark">
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Domain</th>
-                    <th scope="col">Review</th>
+                    <!-- <th scope="col">#</th> -->
+                    <th scope="col">Model</th>
+                    <!-- <th scope="col">Review</th> -->
                     <th scope="col">Sentiment</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="table-success text-success">
+                  <tr class='{{"table-success text-success" if result["onto"]=="positive" else "table-danger text-danger"}}'>
+                    <!-- <th scope="row">1</th> -->
+                    <td>AWSA-Ontology</td>
+                    <!-- <td>Review</td> -->
+                    <td>{{ result['onto'] }}</td>
+                  </tr>
+                  <tr class='{{"table-success text-success" if result["unwt"]=="positive" else "table-danger text-danger"}}'>
+                    <!-- <th scope="row">1</th> -->
+                    <td>AWSA-Unweighted</td>
+                    <!-- <td>Review</td> -->
+                    <td>{{ result['unwt'] }}</td>
+                  </tr>
+                  <!-- <tr class="table-danger text-danger">
                     <th scope="row">1</th>
                     <td>Restaurant</td>
                     <td>Review</td>
                     <td>Positive</td>
-                  </tr>
-                  <tr class="table-success text-success">
-                    <th scope="row">1</th>
-                    <td>Restaurant</td>
-                    <td>Review</td>
-                    <td>Positive</td>
-                  </tr>
-                  <tr class="table-danger text-danger">
-                    <th scope="row">1</th>
-                    <td>Restaurant</td>
-                    <td>Review</td>
-                    <td>Positive</td>
-                  </tr>
+                  </tr> -->
                 </tbody>
               </table>
+              {% endif %}
         </div>
+    </div>
+    <div>
+        
     </div>
 {% endblock %}
 

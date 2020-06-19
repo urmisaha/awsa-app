@@ -6,8 +6,8 @@
         <div class="card card-body border-dark bg-light col-md-8">
             <form method="POST">
                 <div class="form-group row justify-content-center">
-                    <select class="form-control form-control-md col-md-4" name="domain">
-                        <option>Select Domain</option>
+                    <select class="form-control form-control-md col-md-4" name="domain" required>
+                        <option value="">Select Domain</option>
                         <option value="restaurant">Restaurant</option>
                         <option value="movie">Movie</option>
                         <option value="music">Music</option>
@@ -15,7 +15,7 @@
                     </select>
                 </div>
                 <div class="form-group row justify-content-center">
-                    <textarea class="form-control col-md-10" id="formGroupExampleInput" name="review" rows=8 placeholder="Enter review">{{ request.form['review'] }}</textarea>
+                    <textarea class="form-control col-md-10" id="formGroupExampleInput" name="review" rows=8 placeholder="Enter review" required>{{ request.form['review'] }}</textarea>
                 </div>
                 <div class="form-group row justify-content-center">
                     <button type="submit" class="btn btn-dark col-md-4">Predict Sentiment</button>

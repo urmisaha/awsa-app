@@ -24,7 +24,7 @@ is_cuda = torch.cuda.is_available()
 
 # If we have a GPU available, we'll set our device to GPU. We'll use this device variable later in our code.
 if is_cuda:
-    device = torch.device("cuda:2")
+    device = torch.device("cuda:0")
 else:
     device = torch.device("cpu")
 device = torch.device("cpu")
@@ -83,7 +83,8 @@ def unwt_prediction(domain, test_sentence):
     model = BiRNN(word2idx, vocab_size, target_vocab, output_size, embedding_dim, hidden_dim, n_layers).to(device)
 
     # Loading the best model
-    model.load_state_dict(torch.load('../../EMNLP2020/Aspect-weighted-SA/models/' + domain + '/un' + weighted + '_' + dataamount + '_' + str(seed) + '.pt'))
+    filename = '../../EMNLP2020/Aspect-weighted-SA/models/' + domain + '/un' + weighted + '_' + dataamount + '_' + str(seed) + '.pt'
+    model.load_state_dict(torch.load(filename))
 
     test_sentence = re.sub('\d','0',test_sentence)
     test_sentence = re.sub(r"([^ ]+(?<=\.[a-z]{3}))", "<url>", test_sentence)
@@ -92,8 +93,6 @@ def unwt_prediction(domain, test_sentence):
     features = np.zeros(seq_len, dtype=int)
     features[-len(test_sentence):] = np.array(test_sentence)[:seq_len]
 
-    test_data = TensorDataset(torch.from_numpy(np.array(test_sentence)))
-    test_loader = DataLoader(test_data, shuffle=False, batch_size=batch_size)
     h = model.init_hidden(batch_size)
 
     model.eval()
@@ -101,13 +100,14 @@ def unwt_prediction(domain, test_sentence):
     total_labels = torch.LongTensor()
     total_preds = torch.LongTensor()
 
-    for inputs in test_loader:
-        h = tuple([each.data for each in h])
-        inputs = torch.as_tensor(inputs).to(device)
-        inputs = inputs.unsqueeze(0)
-        output = model(inputs, h)
-        pred = torch.round(output.squeeze())  # Rounds the output to 0/1
-        pred = pred.to("cpu").data.numpy()
+    h = tuple([each.data for each in h])
+    inputs = torch.as_tensor(test_sentence).to(device)
+    inputs = inputs.unsqueeze(0)
+    output = model(inputs, h)
+    print("Unweighted output")
+    print(output)
+    pred = torch.round(output.squeeze())  # Rounds the output to 0/1
+    pred = pred.to("cpu").data.numpy()
 
     print("Printing results::: ")
     print(pred)

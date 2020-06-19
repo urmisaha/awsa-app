@@ -125,7 +125,9 @@ def onto_prediction(domain, test_sentence):
     model = BiRNN(scores, word2idx, vocab_size, target_vocab, output_size, embedding_dim, hidden_dim, n_layers).to(device)
 
     # Loading the best model
-    model.load_state_dict(torch.load('../../EMNLP2020/Aspect-weighted-SA/models/' + domain + '/awsa_' + weighted + '_' + dataamount + '_' + str(seed) + '.pt'))
+    filename = '../../EMNLP2020/Aspect-weighted-SA/models/' + domain + '/awsa_' + weighted + '_' + dataamount + '_' + str(seed) + '.pt'
+    # print(filename)
+    model.load_state_dict(torch.load(filename))
 
     test_sentence = re.sub('\d','0',test_sentence)
     test_sentence = re.sub(r"([^ ]+(?<=\.[a-z]{3}))", "<url>", test_sentence)
@@ -135,7 +137,7 @@ def onto_prediction(domain, test_sentence):
     features[-len(test_sentence):] = np.array(test_sentence)[:seq_len]
 
     test_data = TensorDataset(torch.from_numpy(np.array(test_sentence)))
-    test_loader = DataLoader(test_data, shuffle=False, batch_size=batch_size)
+    # test_loader = DataLoader(test_data, shuffle=False, batch_size=batch_size)
     h = model.init_hidden(batch_size)
 
     model.eval()
@@ -143,13 +145,20 @@ def onto_prediction(domain, test_sentence):
     total_labels = torch.LongTensor()
     total_preds = torch.LongTensor()
 
-    for inputs in test_loader:
-        h = tuple([each.data for each in h])
-        inputs = torch.as_tensor(inputs).to(device)
-        inputs = inputs.unsqueeze(0)
-        output = model(inputs, h)
-        pred = torch.round(output.squeeze())  # Rounds the output to 0/1
-        pred = pred.to("cpu").data.numpy()
+    # print(test_loader)
+    # return 1
+    # for inputs in test_loader:
+    h = tuple([each.data for each in h])
+    # inputs = torch.as_tensor(inputs).to(device)
+    inputs = torch.as_tensor(test_sentence).to(device)
+    print("inputs")
+    print(inputs)
+    inputs = inputs.unsqueeze(0)
+    output = model(inputs, h)
+    print("output")
+    print(output)
+    pred = torch.round(output.squeeze())  # Rounds the output to 0/1
+    pred = pred.to("cpu").data.numpy()
 
     print("Printing results::: ")
     print(pred)

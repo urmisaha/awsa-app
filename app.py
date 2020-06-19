@@ -36,8 +36,8 @@ def desc():
     return render_template('desc.html')
 
 def calculate_sentiment(domain, text):
-    print(domain)
-    print(text)
+    # print(domain)
+    # print(text)
     predict_onto = onto_prediction(domain, text)
     predict_unwt = unwt_prediction(domain, text)
     print("model run.. results obtained")
